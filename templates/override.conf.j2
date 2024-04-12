@@ -1,0 +1,4 @@
+{{ ansible_managed | comment }}
+[Service]
+User={{ journald_client__service_override_user }}
+Group={{ journald_client__service_override_group }}

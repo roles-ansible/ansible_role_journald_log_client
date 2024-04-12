@@ -8,6 +8,10 @@
   ansible.builtin.include_tasks:
     file: 'packages.yml'
 
+- name: Manage User systemd-journal-upload
+  ansible.builtin.include_tasks:
+    file: 'user.yml'
+
 - name: Start Systemd journal client Services
   ansible.builtin.include_tasks:
     file: 'systemd.yml'

@@ -10,17 +10,45 @@
     mode: '0644'
   notify: 'systemctl restart systemd-journal-upload.service'
 
-#- name: Create systemd service for rsyslog server
-#  become: true
-#  ansible.builtin.template:
-#    src: 'templates/systemd-journal-remote.service.j2'
-#    backup: true
-#    dest: "/lib/systemd/system/{{ item.systemd_file }}"
-#    owner: 'root'
-#    group: 'root'
-#    mode: '0644'
-#  with_items: "{{ journald_server__systemd_jobs }}"
-#  notify: 'systemctl restart remotesyslogserver'
+- name: Create systemd service for rsyslog server
+  become: true
+  ansible.builtin.template:
+    src: 'templates/systemd-journal-remote.service.j2'
+    backup: true
+    dest: '/lib/systemd/system/systemd-journal-upload.service'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+  notify: 'systemctl restart systemd-journal-upload.service'
+
+- name: delete a directory if it is not needed
+  become: true
+  ansible.builtin.file:
+    path: '/etc/systemd/system/systemd-journal-upload.service.d'
+    state: absent
+  notify: 'systemctl restart systemd-journal-upload.service'
+  when: not journald_client__service_override_usr | bool
+
+- name: Create a directory if it does not exist
+  ansible.builtin.file:
+    path: '/etc/systemd/system/systemd-journal-upload.service.d'
+    state: directory
+    mode: '0755'
+    owner: 'root'
+    group: 'root'
+  notify: 'systemctl restart systemd-journal-upload.service'
+  when: journald_client__service_override_usr | bool
+
+- name: Optionally overwrite users for systemd job
+  become: true
+  ansible.builtin.template:
+    src: templates/override.conf.j2'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+    dest: '/etc/systemd/system/systemd-journal-upload.service.d/override.conf'
+  notify: 'systemctl restart systemd-journal-upload.service'
+  when: journald_client__service_override_usr | bool
 
 - name: Reload systemd daemon
   become: true

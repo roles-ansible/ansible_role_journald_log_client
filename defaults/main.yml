@@ -1,4 +1,8 @@
 ---
 journald_client__url: '127.0.0.1:19532'
+
+journald_client__service_override_usr: false
+journald_client__service_override_user: 'root'
+journald_client__service_override_group: 'root'
 # should we do a version check? (recomended)
 submodules_versioncheck: false
