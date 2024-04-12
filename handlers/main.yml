@@ -1,0 +1,8 @@
+---
+- name: "Restart systemd systemd-journal-upload.service"
+  listen: 'systemctl restart systemd-journal-upload.service'
+  become: true
+  ansible.builtin.systemd:
+    name: "systemd-journal-upload.service"
+    state: 'restarted'
+  when: ansible_service_mgr == "systemd"

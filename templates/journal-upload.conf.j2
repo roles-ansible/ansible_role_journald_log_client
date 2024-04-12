@@ -1,0 +1,10 @@
+{{ ansible_managed | comment }}
+#  This file is part of systemd.
+#
+# See journal-upload.conf(5) for details.
+
+[Upload]
+URL={{ sjournald_client__url }}
+ServerKeyFile=/etc/ssl/certs/wingcon.com.key
+ServerCertificateFile=/etc/ssl/certs/wingcon.com.crt
+TrustedCertificateFile=/etc/ssl/certs/wingcon.com.crt
